@@ -30,7 +30,17 @@ class Photos
         tmp = file.split(@slash)
         name = tmp[tmp.length - 1]
 
-        data = { 'name' => name, 'fullpath' => entry, 'size' => File.size(entry), 'mtime' => File.stat(entry).mtime }
+        stamp = "%10.3f" % File.stat(entry).mtime.to_f
+        # Remove the . from the float after turning it into a string
+        stamp = stamp.sub(/\./, '')
+        
+        data = { 'name' => name, 'fullpath' => entry, 'size' => File.size(entry), 'mtime' => stamp }
+        return data
+    end
+
+    def getLocalFolders(bp, args)
+        data = getDirList(args['path'])
+        args['callback'].invoke(data)
         return data
     end
 
@@ -64,4 +74,36 @@ class Photos
 end
 
 
+rubyCoreletDefinition = {
+  'class' => "Photos",
+  'name'  => "Photos",
+  'major_version' => 0,
+  'minor_version' => 0,
+  'micro_version' => 1,
+  'documentation' => 
+    'Plugin returns a list of Photos/Directories available on the end users machine.',
+
+  'functions' =>
+  [
+    {
+      'name' => 'getLocalFolders',
+      'documentation' => "Returns an Object of files/directories for the given directory.",
+      'arguments' =>
+      [
+         {
+            'name' => 'path',
+            'type' => 'string',
+            'required' => false,
+            'documentation' => 'The path to start at under the default path. Default path is ~/Pictures/'
+          },
+          {
+            'name' => 'callback',
+            'type' => 'callback',
+            'required' => false,
+            'documentation' => 'the callback to send a hello message to'
+          }
+      ]
+    }
+  ] 
+}
 

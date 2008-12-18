@@ -4,9 +4,13 @@
 }
 
 #file_list,
-#folder_list {
+#folder_list,
+#file_list_cont {
     text-align: left;
     height: 100%;
+}
+#file_list_cont {
+    overflow: auto;
 }
 #folder_list ul {
     height: 100%;
@@ -48,7 +52,8 @@
 
 #file_list table {
     border: 1px solid black;
-    width: 100%;
+    width: 99%;
+    margin: 2px;
 }
 #file_list table tr th,
 #file_list table tr td {
@@ -68,7 +73,16 @@
     background-color: #ccc;
 }
 
-
+#file_list table tr td.folder,
+#file_list table tr td.image {
+    padding-left: 18px;
+    background-image: url( folder_open.png );
+    background-repeat: no-repeat;
+    background-position: 1px 2px;
+}
+#file_list table tr td.image {
+    background-image: url( image.png );
+}
 
 
 
