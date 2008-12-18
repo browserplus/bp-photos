@@ -1,5 +1,8 @@
 require 'Photos.rb'
+require 'pp'
 
 
 test = Photos.new([])
-test.getPhotos()
+pp test.getDirList();
+puts '------------------------------'
+pp test.getDirList('Pictures');

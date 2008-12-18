@@ -1,12 +1,11 @@
 require 'find'
+require 'tmpdir'
 require 'Pathname'
 require 'pp'
  
 
 class Photos
     
-
-
     def initialize(args)
         @list = {
             '_pics' => []
@@ -35,50 +34,33 @@ class Photos
         return data
     end
 
-    def getPhotos()
-        mainList = {}
-        Find.find(@path) do |entry|
-            # May need to enhance this match ;)
-            if File.file?(entry) and entry.match(/.jpg|.jpeg|.png|.gif|.bmp/i)
-                filename = entry.sub(@path, '')
-                if filename[0, 1] == @slash
-                    file = filename[1, filename.length]
-                end
-                tmp = file.split(@slash)
-                name = tmp[tmp.length - 1]
-                #Remove .files from the list
-                if name[0, 1] != '.'
-                    len = tmp.length - 1
-                    if len == 0
-                        #Only one file, no loop
-                        #@list['_pics'].push(_getFileInfo(entry))
-                    else
-                        if not @list[tmp[0]]
-                            @list[tmp[0]] = {
-                                '_pics' => []
-                            }
-                        end
-                        spot = @list
-                        lastSpot = spot[tmp[0]]
-                        for i in 1..(len - 1)
-                            if not lastSpot[tmp[i]]
-                                lastSpot[tmp[i]] = {
-                                    '_pics' => []
-                                }
-                                lastSpot = lastSpot[tmp[i]]
-                            end
-                        end
-                        lastSpot['_pics'].push(_getFileInfo(entry))
-                        pp spot
+    def getDirList(passed = @path)
+        path = @path
+        if passed and (passed != @path)
+            path = "#{@path}#{@slash}#{passed}"
+        end
+        list = {
+            'dirs' => [],
+            'pics' => []
+        }
+        items = Dir.entries(path)
+        items.each do |file|
+            filePath = "#{path}#{@slash}#{file}"
+            if file[0, 1] != '.'
+                fileInfo = _getFileInfo(filePath)
+                if File.directory?(filePath)
+                    list['dirs'].push(fileInfo)
+                else
+                    if file.match(/.jpg|.jpeg|.png|.gif|.bmp/i)
+                        list['pics'].push(fileInfo)
                     end
-                    #puts file
-                    #puts tmp
-                    #puts name
                 end
             end
         end
-        pp @list
+        return list
     end
+
+
 end
 
 
