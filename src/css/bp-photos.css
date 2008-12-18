@@ -1,0 +1,78 @@
+
+#browser .yui-gd {
+    height: 100%;
+}
+
+#file_list,
+#folder_list {
+    text-align: left;
+    height: 100%;
+}
+#folder_list ul {
+    height: 100%;
+}
+#folder_list ul li {
+    height: 32%;
+    margin-bottom: 3px;
+}
+
+#folder_list ul li a {
+    border: 1px solid #ccc;
+    background-color: #fff;
+    display: block;
+    font-size: 120%;
+    font-weight: bold;
+    height: 100%;
+    width: 100%;
+    color: #000;
+    text-decoration: none;
+    text-align: center;
+    background-repeat: no-repeat;
+    background-position: center center;
+}
+#folder_list ul li a:hover,
+#folder_list ul li.selected a {
+    border: 1px solid black;
+}
+#folder_list ul li a.photos {
+    background-image: url( photos.png );
+}
+#folder_list ul li a.flickr {
+    color: #fff;
+    background-image: url( http://l.yimg.com/g/images/flickr_logo_gamma.gif.v59899.14 );
+}
+#folder_list ul li a.picasa {
+    color: #fff;
+    background-image: url( http://picasa.google.com/images/logo.jpg );
+}
+
+#file_list table {
+    border: 1px solid black;
+    width: 100%;
+}
+#file_list table tr th,
+#file_list table tr td {
+    padding: 2px;
+    border-right: 1px solid black;
+}
+#file_list table tr th.last,
+#file_list table tr td.last {
+    border-right: none;
+}
+#file_list table tr th {
+    font-weight: bold;
+    background-color: #fff;
+    border-bottom: 1px solid black;
+}
+#file_list table tr.even {
+    background-color: #ccc;
+}
+
+
+
+
+
+
+
+
+
