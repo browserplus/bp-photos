@@ -1,0 +1,86 @@
+<html>  
+<head>
+    <title>getting at iPhoto</title>
+    <style type="text/css" media="screen">
+        #result {border:1px solid #999; background:#ccc; font-size:8pt;padding:5px;}
+        .imageEntry {text-align: center; width:110px; height:120px; border:1px solid #999; margin:10px; background:#ccc; font-size:9pt;padding:5px;float:left;}
+    </style>
+</head>  
+<body>  
+
+    <h2> iPhoto Access </h2>
+    <p>
+	  this is your iphoto library.
+    </p>
+
+	<div id="albums">
+	</div>
+
+    <script type="text/javascript" src="http://bp.yahooapis.com/2.1.14/browserplus-min.js"></script>  
+    <script type="text/javascript">  
+
+    var err = function(f, result) {
+        alert(f + " Error: " + result.error + (result.verboseError ? (": " + result.verboseError) : ""));
+    };
+
+    var renderAlbums = function(r) {
+        if (!r.success) {
+            err("Albums", r);
+            return;
+    	}
+        r = r.value;
+	
+        var albums = document.getElementById("albums");
+        for (a in r) {
+          var s = document.createElement("div");
+          s.className = "imageEntry";
+          var i = document.createElement("img");
+          i.width = 100;
+          i.height = 100;
+          s.appendChild(i);
+          s.appendChild(document.createElement("br"));
+          s.appendChild(document.createTextNode(a));        
+          albums.appendChild(s);      	
+	      BrowserPlus.ImageAlter.Alter({
+	        file: r[a]["key"]["ThumbPath"],
+	        maxwidth: 100,
+	        maxheight: 100,
+	        quality: "low"
+          }, (function() {
+            var iNode = i;
+	        return function(rez) {
+              if (rez.success) {
+	            BrowserPlus.FileAccess.GetURL({file: rez.value.file},
+	               function (x) {
+                     iNode.src = x.value;
+                   });     
+                iNode.height = rez.value.height;
+                iNode.width = rez.value.width;
+              }
+	        }
+          })());
+	    }
+    };
+
+    BrowserPlus.init(function(res) {  
+        if (res.success) {  
+            BrowserPlus.require({ services:
+	          [
+	            {service: "iPhotoLibrary", version: "1"},
+	            {service: "FileAccess", version: "1"},
+	            {service: "ImageAlter", version: "2"}
+	          ]
+	        }, function(r) {
+                if (r.success) {  
+                    BrowserPlus.iPhotoLibrary.Albums({}, renderAlbums);
+                } else {
+                    err("REQUIRE", r);
+                }
+            });
+        } else {
+            err("INIT", res);
+        }
+    });
+    </script>  
+</body>  
+</html>
