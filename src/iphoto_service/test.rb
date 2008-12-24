@@ -11,8 +11,12 @@ class Trans
   end
 end
 
-require 'iphoto.rb'
+require 'photos.rb'
 require 'pp'
 
-test = IPhotoInstance.new([])
+test = PhotosInstance.new([])
 test.Albums(Trans.new, {});
+puts "\nalbum\n"
+test.Photos(Trans.new, {"album"=>"Album_999001"});
+puts "\nalbum 5,1\n"
+test.Photos(Trans.new, {"album"=>"Album_999001","startResult"=>5,"maxResults"=>1});

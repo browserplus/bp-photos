@@ -23,6 +23,48 @@
         alert(f + " Error: " + result.error + (result.verboseError ? (": " + result.verboseError) : ""));
     };
 
+    var getThumbnail = function(iNode, path) {
+	  BrowserPlus.ImageAlter.Alter({
+	    file: path,
+	    maxwidth: 100,
+	    maxheight: 100,
+	    quality: "low"
+      }, function(rez) {
+        if (rez.success) {
+	      BrowserPlus.FileAccess.GetURL({file: rez.value.file},
+										function (x) {
+										  iNode.src = x.value;
+										});     
+          iNode.height = rez.value.height;
+          iNode.width = rez.value.width;
+        } 
+	  });
+    }
+
+    var renderAlbum = function(id) {
+      var albums = document.getElementById("albums");
+	  while (albums.firstChild) albums.removeChild(albums.firstChild);
+      BrowserPlus.Photos.Photos({
+		album: id
+	  }, function(r) {
+		if (!r.success) return;
+		for (entry in r.value.media) {
+          entry = r.value.media[entry];
+          var s = document.createElement("div");
+          s.className = "imageEntry";
+          var i = document.createElement("img");
+          i.width = 100;
+          i.height = 100;
+          s.appendChild(i);
+          s.appendChild(document.createElement("br"));
+          s.appendChild(document.createTextNode(entry.title));        
+          albums.appendChild(s);      	
+          if (!entry.thumbnail && !entry.media) continue;	
+		  getThumbnail(i, entry.thumbnail);
+		}
+	  });
+	}
+
     var renderAlbums = function(r) {
         if (!r.success) {
             err("Albums", r);
@@ -33,46 +75,37 @@
         var albums = document.getElementById("albums");
         for (a in r) {
           var s = document.createElement("div");
+          var lnk = document.createElement("a");
+	      lnk.href = "#";
+	      lnk.onclick = (function() {
+	        var id = a;
+	        return function() { renderAlbum(id); return false; }
+          })();
           s.className = "imageEntry";
           var i = document.createElement("img");
           i.width = 100;
           i.height = 100;
-          s.appendChild(i);
-          s.appendChild(document.createElement("br"));
-          s.appendChild(document.createTextNode(a));        
+          lnk.appendChild(i);
+          lnk.appendChild(document.createElement("br"));
+          lnk.appendChild(document.createTextNode(r[a]["name"]));        
+          s.appendChild(lnk);
           albums.appendChild(s);      	
-	      BrowserPlus.ImageAlter.Alter({
-	        file: r[a]["key"]["ThumbPath"],
-	        maxwidth: 100,
-	        maxheight: 100,
-	        quality: "low"
-          }, (function() {
-            var iNode = i;
-	        return function(rez) {
-              if (rez.success) {
-	            BrowserPlus.FileAccess.GetURL({file: rez.value.file},
-	               function (x) {
-                     iNode.src = x.value;
-                   });     
-                iNode.height = rez.value.height;
-                iNode.width = rez.value.width;
-              }
-	        }
-          })());
-	    }
-    };
+          if (!r[a] || !r[a].media) continue;	
+		  getThumbnail(i, r[a].media);
+		}
+	}
 
     BrowserPlus.init(function(res) {  
         if (res.success) {  
             BrowserPlus.require({ services:
 	          [
-	            {service: "iPhotoLibrary", version: "1"},
+	            {service: "Photos", version: "1"},
 	            {service: "FileAccess", version: "1"},
 	            {service: "ImageAlter", version: "2"}
 	          ]
 	        }, function(r) {
                 if (r.success) {  
-                    BrowserPlus.iPhotoLibrary.Albums({}, renderAlbums);
+                    BrowserPlus.Photos.Albums({}, renderAlbums);
                 } else {
                     err("REQUIRE", r);
                 }
