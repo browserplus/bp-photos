@@ -12,5 +12,8 @@
       "title": "iPhoto Connector",
       "summary": "Allows authorized websites to access pictures in your iPhoto library."
     }
-  }
+  },
+  "permissions": [
+    "AccessYourPhotos"  
+  ]
 }
