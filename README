@@ -1,4 +1,7 @@
-BrowserPlus service for accessing user photos
+This repo can be used to build the BrowserPlus photos service.
+This service is for accessing user photos.
 
-
-Temp README file for now..
+This service uses submodules browserplus/bakery, 
+and browserplus/bp-service-framework.
+ 
+Instructions to build the service are in the file BUILDING.

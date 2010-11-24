@@ -1,10 +1,9 @@
 require 'find'
 require 'tmpdir'
-require 'Pathname'
-require 'pp'
+require 'pathname'
  
 
-class Photos
+class PhotosInstance
     
     def initialize(args)
         @list = {
@@ -75,14 +74,13 @@ end
 
 
 rubyCoreletDefinition = {
-  'class' => "Photos",
+  'class' => "PhotosInstance",
   'name'  => "Photos",
   'major_version' => 0,
   'minor_version' => 0,
   'micro_version' => 1,
   'documentation' => 
-    'Plugin returns a list of Photos/Directories available on the end users machine.',
-
+  'Plugin returns a list of Photos/Directories available on the end users machine.',
   'functions' =>
   [
     {
