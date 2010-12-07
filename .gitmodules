@@ -4,3 +4,6 @@
 [submodule "external/bp-service-framework"]
 	path = external/bp-service-framework
 	url = git://github.com/browserplus/bp-service-framework.git
+[submodule "external/bp-build-templates"]
+	path = external/bp-build-templates
+	url = git://github.com/browserplus/bp-build-templates.git
