@@ -5,7 +5,7 @@ how to build:
  cd external && ruby build.rb && cd ..
  rm -rf build && mkdir build && cd build
  cmake ../src
- make (devenv PhotosRubyService.sln on Windows)
+ make (devenv PhotosRuby.sln on Windows)
  cd test && ruby ./runtests.rb && cd ..
  
 A directory Photos should be generated which is your service ready to 
